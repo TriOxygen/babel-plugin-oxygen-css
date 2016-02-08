@@ -17,6 +17,7 @@ const DEFAULT_OPTIONS = {
   mediaMap: {},
   context: null,
   bundleFile: 'bundle.css',
+  cacheDir: 'tmp/cache/'
 };
 
 export default function plugin(context) {

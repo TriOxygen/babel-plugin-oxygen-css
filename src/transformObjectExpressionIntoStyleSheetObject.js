@@ -47,9 +47,9 @@ function processProperty(key, value, result, context) {
 
     assert(typeof val === 'string' || typeof val === 'number', 'value must be a string or number');
 
-    if (typeof val === 'string') {
-      assert(!isBlank.test(val), 'string value cannot be blank');
-    }
+    // if (typeof val === 'string') {
+    //   assert(!isBlank.test(val), 'string value cannot be blank');
+    // }
 
     result[name] = val;
   } else if (t.isObjectExpression(value)) {
