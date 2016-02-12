@@ -10,7 +10,7 @@ import { resetClassNames} from './generateClassName';
 const KEY = 'OXYGEN_STYLE'
 
 const DEFAULT_OPTIONS = {
-  identifier: 'oxygenStyle',
+  identifier: 'oxygenCss',
   vendorPrefixes: false,
   minify: false,
   compressClassNames: false,
@@ -40,17 +40,17 @@ function visitor(context) {
       enter() {
         const filename = relative(process.cwd(), this.file.opts.filename);
         this.opts = buildOptions(this.opts, filename);
-        this.oxygenStyle = { filename, stylesheets: {}, declarations: 0 };
+        this.oxygenCss = { filename, stylesheets: {}, declarations: 0 };
         context[KEY].visiting[filename] = true;
       },
 
       exit() {
-        const { filename } = this.oxygenStyle;
+        const { filename } = this.oxygenCss;
 
         if (!context[KEY].visiting[filename]) return;
 
-        if (this.oxygenStyle.declarations > 0) {
-          context[KEY].cache[filename] = this.oxygenStyle;
+        if (this.oxygenCss.declarations > 0) {
+          context[KEY].cache[filename] = this.oxygenCss;
         } else {
           delete context[KEY].cache[filename];
         }
@@ -71,20 +71,20 @@ function visitor(context) {
 
       assert(
         t.isVariableDeclarator(path.parentPath.node),
-        'return value of oxygenStyle(...) must be assigned to a variable'
+        'return value of oxygenCss(...) must be assigned to a variable'
       );
 
       const sheetId = path.parentPath.node.id.name;
       const expr = path.node.arguments[0];
       const { context, prefix, compressClassNames } = this.opts;
 
-      assert(expr, 'oxygenStyle(...) call is missing an argument');
+      assert(expr, 'oxygenCss(...) call is missing an argument');
 
       const sheet = {};
       const obj = transformObjectExpressionIntoStyleSheetObject(expr, context);
       transformToRuleSets(obj, Object.assign({}, this.opts, {sheetId}), sheet);
-      this.oxygenStyle.stylesheets[sheetId] = sheet;
-      this.oxygenStyle.declarations += Object.keys(sheet.classMap).length;
+      this.oxygenCss.stylesheets[sheetId] = sheet;
+      this.oxygenCss.declarations += Object.keys(sheet.classMap).length;
 
       const properties = Object.keys(sheet.classMap).reduce((memo, styleId) => {
         return memo.concat(
