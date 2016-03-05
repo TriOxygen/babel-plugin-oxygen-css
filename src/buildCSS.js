@@ -8,8 +8,14 @@ const uppercaseLetter = /([A-Z])/g;
 
 function combineSelector(selectors, classMap) {
   return selectors.map(selector => {
-    const token = selector.token && classMap[selector.token] && classMap[selector.token] || selector.token;
-    return selector.pre + token + selector.post;
+    let className = '';
+    if (selector.className) {
+      className = selector.className && classMap[selector.className] || selector.className;
+    }
+    const pre = selector.pre || '';
+    const post = selector.post || '';
+    const token = selector.token || '';
+    return `${pre}${token}${className}${post}`;
   }).join('');
 }
 
