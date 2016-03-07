@@ -2,6 +2,7 @@ import { generateClassName } from './generateClassName';
 import isHtmlTag from './isHtmlTag';
 
 const isMediaQueryDeclaration = /^@/;
+const isKeyframesDeclaration = /^@/;
 const isDescendantSelector = /^ /;
 const isClassSelector = /^\./;
 const isAndSelector = /^\&/;
@@ -31,6 +32,24 @@ class BlockDeclaration {
     return block;
   }
 
+}
+
+
+class KeyframesDeclaration {
+
+  constructor(name, frames) {
+    this.name = name;
+    this.frames = {};
+    this.rules = frames;
+  }
+
+  store(output) {
+    output.keyframes[this.name] = this.rules;
+  }
+
+  toJson(output, options) {
+    this.store(output);
+  }
 }
 
 class Declaration {
@@ -133,7 +152,7 @@ class ClassDeclaration extends NestedDeclaration {
       const selector = this.parent.selector.slice();
 
       selector.push({
-        pre: '.',
+        pre: ' .',
         className: this.className,
       });
       return selector;
@@ -282,10 +301,14 @@ export default function transformToRuleSets(obj, options, output) {
   output.classMap = output.classMap || {};
   output.declarations = output.declarations || [];
   output.mediaQueries = output.mediaQueries || [];
+  output.keyframes = output.keyframes || {};
 
   Object.keys(obj).forEach(key => {
     const value = obj[key];
-    if (isHtmlTag(key)) {
+    if (isKeyframesDeclaration.test(key)) {
+      const dec = new KeyframesDeclaration(key.substring(1), value);
+      dec.toJson(output, options);
+    } else if (isHtmlTag(key)) {
       const dec = new TagDeclaration(null, key, value);
       dec.toJson(output, options);
     } else {

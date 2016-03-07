@@ -19,8 +19,6 @@ function combineSelector(selectors, classMap) {
   }).join('');
 }
 
-
-
 function buildCSSRule(key, value) {
   if (!unitlessNumbers[key] && typeof value === 'number') {
     value = '' + value + 'px';
@@ -44,6 +42,20 @@ function buildBlock(selector, block, output, indent = '') {
   output.push(indent + '}');
 }
 
+function buildKeyframes(keyframesName, keyframes, output) {
+  output.push('@keyframes ' + keyframesName + ' {');
+  Object.keys(keyframes).forEach(frame => {
+    const block = keyframes[frame];
+    output.push('  ' + frame + ' {');
+    Object.keys(block).forEach(key => {
+      const value = block[key];
+      output.push('    ' + buildCSSRule(key, value));
+    });
+    output.push('  }');
+  })
+  output.push('}');
+}
+
 function combineFiles(cache, mediaMap) {
   const mediaQueries = {};
   const rules = [];
@@ -52,14 +64,16 @@ function combineFiles(cache, mediaMap) {
     Object.keys(fileOutput).forEach(sheetId => {
       const sheet = fileOutput[sheetId];
       sheet.declarations.forEach(declaration => {
-        // console.log(declaration);
         buildBlock(combineSelector(declaration.selector, sheet.classMap), declaration.blockDeclaration, rules);
+      });
+      Object.keys(sheet.keyframes).forEach(keyframe => {
+        const keyframes = sheet.keyframes[keyframe];
+        buildKeyframes(keyframe, keyframes, rules);
       });
       Object.keys(sheet.mediaQueries).forEach(media => {
         const mediaString = mediaMap[media] || media;
         mediaQueries[mediaString] = mediaQueries[mediaString] || [];
         sheet.mediaQueries[media].forEach(declaration => {
-          // console.log(declaration);
           buildBlock(combineSelector(declaration.selector, sheet.classMap), declaration.blockDeclaration, mediaQueries[mediaString], '  ');
         });
       });
