@@ -107,13 +107,15 @@ function buildOptions(options, filename) {
 
   if (typeof options.context === 'string') {
     const file = resolve(options.context);
-
     if (typeof contextFileCache[file] === 'undefined') {
-      contextFileCache[file] = require(file);
+      try {
+        contextFileCache[file] = require(file);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     options.context = contextFileCache[file];
   }
-
   return options;
 }
