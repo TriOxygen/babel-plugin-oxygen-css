@@ -84,7 +84,8 @@ function visitor(context) {
       const obj = transformObjectExpressionIntoStyleSheetObject(expr, context);
       transformToRuleSets(obj, Object.assign({}, this.opts, {sheetId}), sheet);
       this.oxygenCss.stylesheets[sheetId] = sheet;
-      this.oxygenCss.declarations += Object.keys(sheet.classMap).length;
+      // this.oxygenCss.declarations += Object.keys(sheet.classMap).length;
+      this.oxygenCss.declarations += sheet.declarations.length;
 
       const properties = Object.keys(sheet.classMap).reduce((memo, styleId) => {
         return memo.concat(
