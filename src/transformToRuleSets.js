@@ -206,6 +206,8 @@ class CombinatorDeclaration extends NestedDeclaration {
     this.combinatorSelector = combinatorSelector;
     if (!isHtmlTag(combinatorSelector)) {
       this.className = combinatorSelector;
+    } else {
+      this.combinatorSelector = combinatorSelector.toLowerCase();
     }
   }
 
