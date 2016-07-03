@@ -4,10 +4,7 @@
   ],
   "plugins": [
     ["add-module-exports"],
-    ["transform-async-functions"],
-    ["transform-async-to-generator"],
     ["transform-export-extensions"],
-    ["transform-class-properties"],
-    ["transform-object-rest-spread"]
+    ["transform-class-properties"]
   ]
 }
