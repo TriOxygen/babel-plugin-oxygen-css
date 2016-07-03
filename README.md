@@ -1,6 +1,8 @@
 # babel-plugin-oxygen-css
 
-A plugin for Babel v6 which transforms inline styles defined in JavaScript modules into class names so they become available to, e.g. the `className` prop of React elements. While transforming, the plugin processes all JavaScript style definitions found and bundles them up into a CSS file, ready to be requested from your web server.
+A plugin for Babel v6 which transforms inline styles defined in JavaScript modules into class names so they become available to, e.g. the `className` prop of React elements.
+
+While transforming, the plugin processes all JavaScript style definitions found and bundles them up into a CSS file, ready to be requested from your web server.
 
 babel-plugin-oxygen-css works seamlessly on both client and server. It has built-in support for media queries, pseudo-classes, and attribute selectors. The plugin's options allow you to configure vendor-prefixing, minification, and class name compression.
 
@@ -170,7 +172,7 @@ There's also a shorthand notation for specifying pixel values, see [this React t
 }
 ```
 
-As you can see, pseudo-classes and attribute selectors can be nested arbitrarily deep. 
+As you can see, pseudo-classes and attribute selectors can be nested arbitrarily deep.
 **Media Queries**
 Media queries are also supported. All the media queries will be grouped in the output. Media queries cannot be at the root of the style object to make it easier to distinguish between keyframes and media queries.
 
